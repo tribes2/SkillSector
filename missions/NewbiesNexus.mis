@@ -14,9 +14,9 @@
 new SimGroup(MissionGroup) {
 
 	Team_Hunters_timeLimit = "25";
-	powerCount = "0";
-	cdTrack = "5";
 	musicTrack = "ice";
+	cdTrack = "5";
+	powerCount = "0";
 	Hunters_timeLimit = "25";
 
 	new MissionArea(MissionArea) {
@@ -54,8 +54,8 @@ new SimGroup(MissionGroup) {
 		squareSize = "8";
 
 		position = "-1024 -1024 0";
-		visibleDistance = "1200";
 		hazeDistance = "250";
+		visibleDistance = "1200";
 		locked = "true";
 	};
 	new NavigationGraph(NavGraph) {
@@ -63,14 +63,14 @@ new SimGroup(MissionGroup) {
 		cullDensity = "0.3";
 		customArea = "0 0 0 0";
 
-		position = "0 0 0 1";
-		YDimOverSize = "0";
-		conjoinBowlDev = "20";
-		rotation = "0 0 0 0";
 		coverage = "0";
-		scale = "1 1 1";
-		GraphFile = "Scarabrae_nef.nav";
 		XDimOverSize = "0";
+		position = "0 0 0 1";
+		GraphFile = "Scarabrae_nef.nav";
+		rotation = "0 0 0 0";
+		YDimOverSize = "0";
+		scale = "1 1 1";
+		conjoinBowlDev = "20";
 		locked = "true";
 	};
 	new Sky(Sky) {
@@ -245,7 +245,6 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
-					Target = "33";
 					locked = "false";
 				};
 				new InteriorInstance() {
@@ -267,8 +266,6 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
-					Trigger = "39503";
-					Target = "34";
 					locked = "false";
 				};
 				new StaticShape() {
@@ -280,8 +277,6 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
-					Trigger = "39505";
-					Target = "35";
 					locked = "false";
 				};
 				new InteriorInstance() {
@@ -303,140 +298,7 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
-					Trigger = "39508";
-					Target = "36";
 					locked = "false";
-				};
-				new ScriptObject(ObserverHUDWeaponList) {
-					class = "ObserverHUDWeaponList";
-
-					DamageTypeName12 = "Explosion";
-					DamageType87 = "Other";
-					DamageTypeName3 = "Chaingun";
-					DamageType72 = "Other";
-					DamageType86 = "Other";
-					DamageType96 = "Other";
-					DamageType55 = "Other";
-					DamageType7 = "ELF";
-					DamageType66 = "Other";
-					DamageType88 = "Other";
-					DamageType48 = "Other";
-					DamageTypeName16 = "DepTurret";
-					DamageType3 = "Chaingun";
-					DamageType5 = "Grenade";
-					DamageType14 = "Ground";
-					DamageType31 = "SatchelCharge";
-					DamageTypeName13 = "Impact";
-					DamageType70 = "Other";
-					DamageType59 = "Other";
-					DamageType85 = "Other";
-					DamageType58 = "Other";
-					team = "0";
-					DamageTypeName14 = "Ground";
-					DamageType64 = "Other";
-					DamageType89 = "Other";
-					DamageType44 = "Other";
-					DamageType33 = "Other";
-					DamageType18 = "Turret";
-					DamageType22 = "DepTurret";
-					DamageType77 = "Other";
-					DamageType71 = "Other";
-					DamageTypeName22 = "TankMortar";
-					DamageTypeName6 = "Laser";
-					DamageTypeName5 = "Grenade";
-					DamageType39 = "Other";
-					DamageType65 = "Other";
-					DamageType23 = "Turret";
-					DamageType1 = "Blaster";
-					DamageType28 = "BomberBombs";
-					DamageType16 = "Turret";
-					DamageType62 = "Other";
-					DamageType30 = "TankMortar";
-					DamageType81 = "Other";
-					DamageTypeName17 = "Ground";
-					DamageType10 = "ShockLance";
-					DamageType49 = "Other";
-					DamageTypeName1 = "Blaster";
-					DamageType68 = "Other";
-					DamageType67 = "Other";
-					DamageType41 = "Other";
-					MaxDamageType = "24";
-					DamageType63 = "Other";
-					DamageType73 = "Other";
-					DamageType29 = "TankChaingun";
-					DamageType52 = "Other";
-					DamageType2 = "Plasma";
-					DamageTypeName21 = "TankChaingun";
-					DamageType78 = "Other";
-					DamageType21 = "DepTurret";
-					DamageTypeName2 = "Plasma";
-					DamageTypeName4 = "Disc";
-					DamageType37 = "Other";
-					DamageType24 = "Other";
-					DamageType84 = "Other";
-					DamageTypeName23 = "SatchelCharge";
-					DamageType43 = "Other";
-					DamageType79 = "Other";
-					DamageType9 = "Missile";
-					DamageType6 = "Laser";
-					DamageType25 = "Ground";
-					DamageType94 = "Other";
-					DamageType97 = "Other";
-					DamageType17 = "Turret";
-					DamageType54 = "Other";
-					DamageTypeName7 = "ELF";
-					DamageType75 = "Other";
-					DamageTypeName10 = "ShockLance";
-					DamageType76 = "Other";
-					mod = "base";
-					DamageType99 = "Suicide";
-					DamageType15 = "Turret";
-					DamageType57 = "Other";
-					DamageType40 = "Other";
-					DamageTypeName19 = "BellyTurret";
-					DamageType74 = "Other";
-					DamageType35 = "Other";
-					DamageType53 = "Other";
-					DamageType11 = "Mine";
-					DamageType92 = "Other";
-					DamageTypeName18 = "ShrikeBlaster";
-					DamageType13 = "Impact";
-					DamageType83 = "Other";
-					DamageType38 = "Other";
-					DamageType51 = "Other";
-					DamageTypeName20 = "BomberBombs";
-					DamageType93 = "Other";
-					DamageTypeName24 = "Other";
-					DamageType12 = "Explosion";
-					DamageTypeName11 = "Mine";
-					DamageTypeName9 = "Missile";
-					DamageType56 = "Other";
-					DamageType61 = "Other";
-					DamageType20 = "Turret";
-					DamageType98 = "Other";
-					DamageType27 = "BellyTurret";
-					DamageType4 = "Disc";
-					DamageType0 = "Other";
-					DamageType69 = "Other";
-					DamageType32 = "Turret";
-					DamageType45 = "Other";
-					DamageType60 = "Other";
-					DamageType82 = "Other";
-					DamageType26 = "ShrikeBlaster";
-					DamageType46 = "Other";
-					DamageTypeName15 = "Turret";
-					DamageType8 = "Mortar";
-					DamageType47 = "Other";
-					DamageType95 = "Other";
-					DamageType42 = "Other";
-					DamageType34 = "Other";
-					DamageType19 = "Turret";
-					DamageTypeName8 = "Mortar";
-					DamageType36 = "Other";
-					DamageType80 = "Other";
-					DamageType90 = "Other";
-					DamageType91 = "Other";
-					DamageType50 = "Other";
 				};
 			};
 		};
@@ -531,12 +393,7 @@ new SimGroup(MissionGroup) {
 			lockCount = "0";
 			homingCount = "0";
 
-			damageTimeMS = "247515";
 			inUse = "Down";
-			Trigger = "39520";
-			lastDamagedBy = "5025";
-			Target = "39";
-			lastDamagedByTeam = "1";
 			notReady = "1";
 		};
 		new PhysicalZone(TractorBeamFront) {
@@ -547,6 +404,23 @@ new SimGroup(MissionGroup) {
 			gravityMod = "-3";
 			appliedForce = "0 0 0";
 			polyhedron = "0.0000000 0.0000000 0.0000000 10.0000000 0.0000000 0.0000000 -0.0000000 -40.0000000 -0.0000000 -0.0000000 -0.0000000 160.0000000";
+		};
+		new Marker(BankSpawn) {
+			position = "-155.307 126.636 243.233";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			seqNum = "0";
+			msToNext = "1000";
+		};
+		new StaticShape() {
+			position = "-179.634 134.044 242.142";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "BankTeleporter";
+			lockCount = "0";
+			homingCount = "0";
+
+			destination = "ATLSpawn";
 		};
 	};
 	new SimGroup(AimTrain) {
@@ -601,18 +475,22 @@ new SimGroup(MissionGroup) {
 
 				placeholder = "1";
 			};
-			new StaticShape(BankTeleport) {
+			new StaticShape(ATLBankTeleport) {
 				position = "-539.94 114.928 212.877";
 				rotation = "0 -1 0 9.99997";
 				scale = "1 1 1";
-				dataBlock = "MPBTeleporter";
+				dataBlock = "BankTeleporter";
 				lockCount = "0";
 				homingCount = "0";
 
-				damageTimeMS = "9247167";
-				lastDamagedBy = "39473";
-				Target = "40";
-				lastDamagedByTeam = "1";
+				destination = "BankSpawn";
+			};
+			new Marker(ATLSpawn) {
+				position = "-546.054 112.086 223.904";
+				rotation = "1 0 0 0";
+				scale = "1 1 1";
+				seqNum = "0";
+				msToNext = "1000";
 			};
 		};
 	};

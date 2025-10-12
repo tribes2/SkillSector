@@ -2,7 +2,7 @@
 datablock StaticShapeData(BankTeleporter): StaticShapeDamageProfile {
    className = Station;
    catagory = "Stations";
-   shapeFile = "station_teleport.dts";
+   shapeFile = "nexusbase.dts";
    maxDamage = 1.20;
    destroyedLevel = 1.20;
    disabledLevel = 0.84;
@@ -32,12 +32,14 @@ datablock StaticShapeData(BankTeleporter): StaticShapeDamageProfile {
 function BankTeleporter::onCollision(%data, %obj, %collider) {
     // Teleporters are generally one way in Skill Sector
     // Teleporter entities are linked to 'spawn point' objects
+    echo("BankTeleporter collision: " @ %obj @ " and collider: " @ %collider);
     if (%obj.disabled) {
         messageClient(%collider.client, 'MsgStationDenied', '\c2Teleporter is recharging please stand by. ~wfx/powered/nexus_deny.wav');
         return;
     }
+    messageClient(%collider.client, 'MsgTeleportStart', '\c2Teleporter is calculating transport coherence... ~wfx/misc/nexus_idle.wav');
     %collider.setVelocity("0 0 0");
-    %collider.disableMove = true;
+    %collider.setMoveState(true);
     %collider.startFade(1000, 0, true);
     %collider.playAudio($ActivateThread, StationVehicleAcitvateSound);
     %obj.disabled = 1;
@@ -45,8 +47,18 @@ function BankTeleporter::onCollision(%data, %obj, %collider) {
     %obj.playThread($ActivateThread, "activate");
 
     %data.sparkEmitter(%obj);
-    %data.schedule(2000, "teleportout", %obj, %collider);
-    %data.schedule(4000, "teleportingDone", %obj, %collider);
+    %data.schedule(1500, "teleportout", %obj, %collider);
+    %data.schedule(3000, "teleportingDone", %obj, %collider);
+}
+
+function BankTeleporter::teleportOut(%data, %obj, %player) {
+    if(isObject(%obj.destination)) {
+        %player.setTransform(%obj.destination.getTransform());
+    } else {
+        messageClient(%player.client, 'MsgTeleFailed', 'No valid teleporting destination.');
+        %player.teleporting = 0;
+    }
+    %data.schedule(1000, "teleportIn", %player);
 }
 
 // function BankTeleporter::onCollision(%data, %obj, %col)
@@ -101,19 +113,8 @@ function BankTeleporter::onCollision(%data, %obj, %collider) {
 //       return;
 // }
 
-function BankTeleporter::teleportOut(%data, %obj, %player) {
-    if(isObject(%obj.destination)) {
-        %player.setTransform(%obj.MPB.spawnPos[%index] @ " " @ getWords(%obj.MPB.getTransform(), 3, 6));
-    } else {
-        %player.teleporting = 0;
-    } else {
-        messageClient(%player.client, 'MsgTeleFailed', 'No Valid teleporting positions.');
-        %player.teleporting = 0;
-    }
-    %data.schedule(1000, "teleportIn", %player);
-}
-
 function BankTeleporter::teleportIn(%data, %player) {
+    messageClient(%collider.client, 'MsgTeleportStart', '\c2Teleport to '@ %data.destination @' complete! ~wfx/powered/nexus_idle.wav');
    %data.sparkEmitter(%player); // z0dd - ZOD, 4/24/02. teleport sparkles
    %player.startFade(1000, 0, false );
    %player.playAudio($PlaySound, StationVehicleDeactivateSound);

@@ -1,6 +1,15 @@
+# Binary T2 filetypes that shouldn't be committed
+*.dso
+*.vl2
+
+# Irrelevant Classic mod paths
 editor/
 lighting/
 prefs/
 gui/
-*.dso
 Classic*
+
+# scripts folder need to be ignored and then exclusions have to be carved out
+# scripts/ ignores the path entirely, whereas scripts/* is treated as a pattern
+scripts/*
+!scripts/SkillSector*.cs
