@@ -1,0 +1,6 @@
+editor/
+lighting/
+prefs/
+gui/
+*.dso
+Classic*
