@@ -67,58 +67,6 @@ function BankTeleporter::teleportOut(%data, %obj, %player) {
     %data.schedule(1000, "teleportIn", %player);
 }
 
-// function BankTeleporter::onCollision(%data, %obj, %col)
-// {
-//     if(%col.getDataBlock().className !$= "Armor" || %col.getState() $= "Dead" || %col.teleporting) {
-//         return;
-//     }
-
-//    if(isObject(%col)) {
-//       if(%obj.team == %col.client.team) {
-//          if(!%obj.isDisabled()) {
-//             if(%obj.isPowered()) {
-//                if(isObject(%obj.MPB) && %obj.MPB.fullyDeployed)
-//                {
-//                   if(%obj.disabled == 0)
-//                   {
-//                      %col.lastWeapon = ( %col.getMountedImage($WeaponSlot) == 0 ) ? "" : %col.getMountedImage($WeaponSlot).item;
-//                      %col.unmountImage($WeaponSlot);
-//                      %pos = %obj.position;
-//                      %col.setvelocity("0 0 0");
-//                      %col.setMoveState(true);
-//                      %rot = getWords(%col.getTransform(), 3, 6);
-//                      %col.setTransform(getWord(%pos,0) @ " " @ getWord(%pos,1) @ " " @ getWord(%pos,2) + 0.6 @ " " @ %rot);
-//                      %col.teleporting = 1;
-//                      %col.startFade( 1000, 0, true );
-//                      %col.playAudio($PlaySound, StationVehicleAcitvateSound);
-
-//                      %obj.disabled = 1; // Disable the teleporter to more then one person at a time for a time.
-//                      %obj.setThreadDir($ActivateThread, TRUE);
-//                      %obj.playThread($ActivateThread, "activate");
-
-//                      %data.sparkEmitter(%obj);
-//                      %data.schedule(2000, "teleportout", %obj, %col);
-//                      %data.schedule(4000, "teleportingDone", %obj, %col);
-//                   }
-//                   else
-//                      messageClient(%col.client, 'MsgTeleportRecharging', '\c2Teleporter is recharging please stand by. ~wfx/powered/nexus_deny.wav'); 
-//                }
-//                else
-//                   MessageClient(%col.client, "MsgNoMPB", 'MPB is not deployed.');
-//             }
-//             else
-//                messageClient(%col.client, 'MsgStationNoPower', '\c2Teleporter is not powered.');
-//          }
-//          else
-//             messageClient(%col.client, 'MsgStationDisabled', '\c2Teleporter is disabled.');
-//       }
-//       else
-//          messageClient(%col.client, 'MsgStationDenied', '\c2Access Denied -- Wrong team.~wfx/powered/station_denied.wav');
-//    }
-//    else
-//       return;
-// }
-
 function BankTeleporter::teleportIn(%data, %player) {
     messageClient(%collider.client, 'MsgTeleportStart', '\c2Teleport to '@ %data.destination @' complete! ~wfx/powered/nexus_idle.wav');
    %data.sparkEmitter(%player); // z0dd - ZOD, 4/24/02. teleport sparkles
@@ -171,53 +119,6 @@ function BankTeleporter::teleportingDone(%data, %obj, %player)
       if(%player.inv[%player.lastWeapon])
          %player.use(%player.lastWeapon); 
       else
-         %player.selectWeaponSlot( 0 );
+         %player.selectWeaponSlot(0);
    }
-}
-
-//------------------------------------------------------------------------------------------
-// Gets called from function MobileBaseVehicle::vehicleDeploy(%data, %obj, %player, %force).
-// Passes this information to the MPBTeleporter::teleportOut function.
-//------------------------------------------------------------------------------------------
-
-function checkSpawnPos(%MPB, %radius)
-{
-   for(%y = -1; %y < 1; %y += 0.25)
-   {
-      %xCount=0;
-      for(%x = -1; %x < 1; %x += 0.25)
-      {
-         $MPBSpawnPos[(%yCount * 8) + %xCount] = %x @ " " @ %y; 
-         %xCount++;
-      }
-      %yCount++;
-   }
-   %count = -1;
-
-   for(%x = 0; %x < 64; %x++)
-   {
-      %pPos = getWords(%MPB.getTransform(), 0, 2);
-      %pPosX = getWord(%pPos, 0);
-      %pPosY = getWord(%pPos, 1);
-      %pPosZ = getWord(%pPos, 2);
-      
-      %posX = %pPosX + ( getWord($MPBSpawnPos[%x],0) * %radius);
-      %posY = %pPosY + (getWord($MPBSpawnPos[%x],1) * %radius);
-      
-      %terrHeight = getTerrainHeight(%posX @ " " @ %posY);
-
-      if(mAbs(%terrHeight - %pPosZ) < %radius )
-      {
-         %mask = $TypeMasks::VehicleObjectType     | $TypeMasks::MoveableObjectType   |
-                 $TypeMasks::StaticShapeObjectType | $TypeMasks::StaticTSObjectType   | 
-                 $TypeMasks::ForceFieldObjectType  | $TypeMasks::ItemObjectType       | 
-                 $TypeMasks::PlayerObjectType      | $TypeMasks::TurretObjectType     |
-                 $TypeMasks::InteriorObjectType;
-
-         InitContainerRadiusSearch(%posX @ " " @ %posY @ " " @ %terrHeight, 2, %mask);
-         if(ContainerSearchNext() == 0)
-            %MPB.spawnPos[%count++] = %posX @ " " @ %posY @ " " @ %terrHeight;                  
-      }
-   }   
-   %MPB.spawnPosCount = %count;
 }
