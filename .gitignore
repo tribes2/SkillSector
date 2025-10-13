@@ -10,6 +10,7 @@ gui/
 Classic*
 
 # scripts folder need to be ignored and then exclusions have to be carved out
-# scripts/ ignores the path entirely, whereas scripts/* is treated as a pattern
+# scripts/ ignores the entire path forever, whereas scripts/* is treated as a pattern
+# ! lets you carve out an exception pattern
 scripts/*
 !scripts/SkillSector*.cs

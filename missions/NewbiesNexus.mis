@@ -372,8 +372,6 @@ new SimGroup(MissionGroup) {
 			dataBlock = "SolarPanel";
 			lockCount = "0";
 			homingCount = "0";
-
-			Target = "37";
 		};
 		new StaticShape() {
 			position = "-158.234 132.947 290.416";
@@ -382,8 +380,6 @@ new SimGroup(MissionGroup) {
 			dataBlock = "SolarPanel";
 			lockCount = "0";
 			homingCount = "0";
-
-			Target = "38";
 		};
 		new StaticShape(MainInventory) {
 			position = "-158.549 153.858 241.953";
@@ -413,13 +409,13 @@ new SimGroup(MissionGroup) {
 			msToNext = "1000";
 		};
 		new StaticShape() {
-			position = "-179.634 134.044 242.142";
+			position = "-176.434 144.844 233.142";
 			rotation = "1 0 0 0";
 			scale = "1 1 1";
 			dataBlock = "BankTeleporter";
 			lockCount = "0";
 			homingCount = "0";
-
+			Desc = "Static Aim Trainer\nShoot static targets while in the air to score points!\nMove faster to score more points and have fun!";
 			destination = "ATLSpawn";
 		};
 	};
@@ -482,12 +478,12 @@ new SimGroup(MissionGroup) {
 				dataBlock = "BankTeleporter";
 				lockCount = "0";
 				homingCount = "0";
-
+				Desc = "\nWelcome back to the Bank!";
 				destination = "BankSpawn";
 			};
 			new Marker(ATLSpawn) {
 				position = "-546.054 112.086 223.904";
-				rotation = "1 0 0 0";
+				rotation = "0 0 -1 90";
 				scale = "1 1 1";
 				seqNum = "0";
 				msToNext = "1000";

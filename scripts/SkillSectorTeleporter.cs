@@ -33,6 +33,7 @@ function BankTeleporter::onCollision(%data, %obj, %collider) {
     // Teleporters are generally one way in Skill Sector
     // Teleporter entities are linked to 'spawn point' objects
     echo("BankTeleporter collision: " @ %obj @ " and collider: " @ %collider);
+    echo("Banker: " @ %obj.desc);
     if (%obj.disabled) {
         messageClient(%collider.client, 'MsgStationDenied', '\c2Teleporter is recharging please stand by. ~wfx/powered/nexus_deny.wav');
         return;
@@ -49,6 +50,11 @@ function BankTeleporter::onCollision(%data, %obj, %collider) {
     %data.sparkEmitter(%obj);
     %data.schedule(1500, "teleportout", %obj, %collider);
     %data.schedule(3000, "teleportingDone", %obj, %collider);
+    if (%obj.desc !$= "") {
+        echo("isObject passed");
+        echo(%obj.desc);
+        centerprint(%collider.client, %obj.desc, 5, 3);
+    }
 }
 
 function BankTeleporter::teleportOut(%data, %obj, %player) {
@@ -116,7 +122,7 @@ function BankTeleporter::teleportOut(%data, %obj, %player) {
 function BankTeleporter::teleportIn(%data, %player) {
     messageClient(%collider.client, 'MsgTeleportStart', '\c2Teleport to '@ %data.destination @' complete! ~wfx/powered/nexus_idle.wav');
    %data.sparkEmitter(%player); // z0dd - ZOD, 4/24/02. teleport sparkles
-   %player.startFade(1000, 0, false );
+   %player.startFade(1000, 0, false);
    %player.playAudio($PlaySound, StationVehicleDeactivateSound);
 }
 
