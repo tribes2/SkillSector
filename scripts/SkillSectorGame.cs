@@ -5,7 +5,7 @@
 // url: https://github.com/tribes2/SkillSector
 
 // Allows you to modify AimTrain placeholder entities.
-// Don't leave it on or AimTrain will be a bunch of statues that do nothing.
+// Leave it on when editing the map, leave it off when playing the game.
 $DEVMODE = 1;
 
 // thanks DarkTiger (you can prob list them all via datablockGroup.getCount(); and iterate them all and do echo %obj.getName();)
@@ -16,9 +16,12 @@ function dumpDatablockNames() {
 }
 
 // DEVMODE reload/test function
-function ssrl() {
+function ssl() {
     exec("scripts/SkillSectorGame.cs");
     findAndReplacePlaceholders();
+}
+function ssrl() {
+    exec("scripts/SkillSectorGame.cs");
 }
 
 function dc() {
@@ -27,6 +30,7 @@ function dc() {
 
 if ($DEVMODE) {
     moveMap.bind(keyboard, "f5", disconnect);
+    ObserverHUDWeaponList.delete();
 }
 
 // Load the various modes, datablocks and functions.
