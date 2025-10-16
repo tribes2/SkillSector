@@ -1,4 +1,4 @@
-// SkillSector game has a README.md, read that instead.
+// SkillSector has a README.md, read that instead.
 
 // author: loop
 // date: 10/2025
@@ -36,3 +36,4 @@ if ($DEVMODE) {
 // Load the various modes, datablocks and functions.
 exec("scripts/SkillSectorTeleporter.cs");
 exec("scripts/SkillSectorAimTrainer.cs");
+exec("scripts/SkillSectorTractorBeam.cs");

@@ -12,7 +12,6 @@ function resetDummyPosition(%this) {
     %this.setvelocity("0 0 0");
 }
 
-
 function atsessionEnd(%player) {
     echo("session ended");
     %player.aim_training = 0;

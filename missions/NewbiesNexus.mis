@@ -13,11 +13,11 @@
 //--- OBJECT WRITE BEGIN ---
 new SimGroup(MissionGroup) {
 
-	Team_Hunters_timeLimit = "25";
 	musicTrack = "ice";
+	Team_Hunters_timeLimit = "25";
 	cdTrack = "5";
-	powerCount = "0";
 	Hunters_timeLimit = "25";
+	powerCount = "0";
 
 	new MissionArea(MissionArea) {
 		area = "-1008 -1032 2144 2080";
@@ -63,11 +63,11 @@ new SimGroup(MissionGroup) {
 		cullDensity = "0.3";
 		customArea = "0 0 0 0";
 
-		coverage = "0";
-		XDimOverSize = "0";
 		position = "0 0 0 1";
-		GraphFile = "Scarabrae_nef.nav";
+		coverage = "0";
 		rotation = "0 0 0 0";
+		XDimOverSize = "0";
+		GraphFile = "Scarabrae_nef.nav";
 		YDimOverSize = "0";
 		scale = "1 1 1";
 		conjoinBowlDev = "20";
@@ -245,6 +245,7 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
+					Target = "33";
 					locked = "false";
 				};
 				new InteriorInstance() {
@@ -266,6 +267,8 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
+					Trigger = "7610";
+					Target = "34";
 					locked = "false";
 				};
 				new StaticShape() {
@@ -277,6 +280,8 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
+					Trigger = "7612";
+					Target = "35";
 					locked = "false";
 				};
 				new InteriorInstance() {
@@ -298,6 +303,8 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
+					Trigger = "7615";
+					Target = "36";
 					locked = "false";
 				};
 			};
@@ -372,6 +379,8 @@ new SimGroup(MissionGroup) {
 			dataBlock = "SolarPanel";
 			lockCount = "0";
 			homingCount = "0";
+
+			Target = "37";
 		};
 		new StaticShape() {
 			position = "-158.234 132.947 290.416";
@@ -380,6 +389,8 @@ new SimGroup(MissionGroup) {
 			dataBlock = "SolarPanel";
 			lockCount = "0";
 			homingCount = "0";
+
+			Target = "38";
 		};
 		new StaticShape(MainInventory) {
 			position = "-158.549 153.858 241.953";
@@ -389,17 +400,10 @@ new SimGroup(MissionGroup) {
 			lockCount = "0";
 			homingCount = "0";
 
-			inUse = "Down";
 			notReady = "1";
-		};
-		new PhysicalZone(TractorBeamFront) {
-			position = "-142.042 106.838 82.3519";
-			rotation = "1 0 0 0";
-			scale = "1 1 1";
-			velocityMod = "1";
-			gravityMod = "-3";
-			appliedForce = "0 0 0";
-			polyhedron = "0.0000000 0.0000000 0.0000000 10.0000000 0.0000000 0.0000000 -0.0000000 -40.0000000 -0.0000000 -0.0000000 -0.0000000 160.0000000";
+			Trigger = "7626";
+			inUse = "Down";
+			Target = "39";
 		};
 		new Marker(BankSpawn) {
 			position = "-155.307 126.636 243.233";
@@ -413,10 +417,17 @@ new SimGroup(MissionGroup) {
 			rotation = "1 0 0 0";
 			scale = "1 1 1";
 			dataBlock = "BankTeleporter";
-			lockCount = "0";
-			homingCount = "0";
-			Desc = "Static Aim Trainer\nShoot static targets while in the air to score points!\nMove faster to score more points and have fun!";
 			destination = "ATLSpawn";
+			desc = "Static Aim Trainer\nShoot static targets while in the air to score points!\nMove faster to score more points and have fun!";
+		};
+		new ForceFieldBare(TractorBeamFront) {
+			position = "-142.101 65.701 103.021";
+			rotation = "1 0 0 0";
+			scale = "10 40 140";
+			dataBlock = "TractorBeamFF";
+			velocityMod = "1.0";
+			gravityMod = "-2.75";
+			appliedForce = "0 0 0";
 		};
 	};
 	new SimGroup(AimTrain) {
@@ -478,8 +489,10 @@ new SimGroup(MissionGroup) {
 				dataBlock = "BankTeleporter";
 				lockCount = "0";
 				homingCount = "0";
-				Desc = "\nWelcome back to the Bank!";
+
 				destination = "BankSpawn";
+				Target = "42";
+				Desc = "\nWelcome back to the Bank!";
 			};
 			new Marker(ATLSpawn) {
 				position = "-546.054 112.086 223.904";
