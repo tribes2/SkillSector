@@ -25,7 +25,9 @@ function SkillSector::initGameVars(%game) {
 
 function SkillSector::missionLoadDone(%game) {
     DefaultGame::missionLoadDone(%game);
-    
+
+    echo("Mission loading...");
+
     AimTrainerInit();
     WaypointWranglerInit();
 }
