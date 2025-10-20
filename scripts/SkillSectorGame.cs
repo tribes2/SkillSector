@@ -7,6 +7,7 @@
 // Allows you to modify AimTrain placeholder entities.
 // Leave it on when editing the map, leave it off when playing the game.
 $DEVMODE = 1;
+$SkillSector::Version = "DEV";
 
 // Load the various modes, datablocks and functions.
 exec("scripts/SkillSectorTeleporter.cs");

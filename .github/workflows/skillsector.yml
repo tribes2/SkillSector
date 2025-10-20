@@ -14,11 +14,14 @@ jobs:
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4
-      # - name: Update DMP2::Version script to match GitHub tag
-      #   run: |
-      #     VERSION_FILE='scripts/autoexec/dmp2VersionCheck.cs'
-      #     NEW_VERSION="\"${{ github.ref_name }}\""
-      #     sed -i "s/\(\$DMP2::Version = \)[^;]*;/\1${NEW_VERSION};/" "$VERSION_FILE"
+      - name: Disable development mode when creating a release
+        run: |
+          sed -i "s/DEVMODE.*=.*1;/DEVMODE = 0" scripts/SkillSectorGame.cs
+      - name: Update SkillSector version to match GitHub tag
+        run: |
+          VERSION_FILE='scripts/SkillSectorGame.cs'
+          NEW_VERSION="\"${{ github.ref_name }}\""
+          sed -i "s/\(\$SkillSector::Version = \)[^;]*;/\1${NEW_VERSION};/" "$VERSION_FILE"
       - name: Build and release a vl2 using the vl2-builder action
         id: 'release'
         uses: tribes2/vl2-builder@v2.0
