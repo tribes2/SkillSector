@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Disable development mode when creating a release
         run: |
-          sed -i "s/DEVMODE.*=.*1;/DEVMODE = 0" scripts/SkillSectorGame.cs
+          sed -i "s/DEVMODE.*=.*1;/DEVMODE = 0/" scripts/SkillSectorGame.cs
       - name: Update SkillSector version to match GitHub tag
         run: |
           VERSION_FILE='scripts/SkillSectorGame.cs'
