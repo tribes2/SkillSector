@@ -20,6 +20,12 @@ package SkillSector {
 };
 
 function SkillSector::initGameVars(%game) {
+}
+
+
+function SkillSector::missionLoadDone(%game) {
+    DefaultGame::missionLoadDone(%game);
+    
     AimTrainerInit();
     WaypointWranglerInit();
 }
