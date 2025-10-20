@@ -13,11 +13,11 @@
 //--- OBJECT WRITE BEGIN ---
 new SimGroup(MissionGroup) {
 
-	musicTrack = "ice";
 	Team_Hunters_timeLimit = "25";
-	cdTrack = "5";
-	Hunters_timeLimit = "25";
 	powerCount = "0";
+	cdTrack = "5";
+	musicTrack = "ice";
+	Hunters_timeLimit = "25";
 
 	new MissionArea(MissionArea) {
 		area = "-1008 -1032 2144 2080";
@@ -63,14 +63,14 @@ new SimGroup(MissionGroup) {
 		cullDensity = "0.3";
 		customArea = "0 0 0 0";
 
+		GraphFile = "Scarabrae_nef.nav";
+		conjoinBowlDev = "20";
 		position = "0 0 0 1";
 		coverage = "0";
 		rotation = "0 0 0 0";
 		XDimOverSize = "0";
-		GraphFile = "Scarabrae_nef.nav";
-		YDimOverSize = "0";
 		scale = "1 1 1";
-		conjoinBowlDev = "20";
+		YDimOverSize = "0";
 		locked = "true";
 	};
 	new Sky(Sky) {
@@ -267,7 +267,7 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
-					Trigger = "7610";
+					Trigger = "4552";
 					Target = "34";
 					locked = "false";
 				};
@@ -280,7 +280,7 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
-					Trigger = "7612";
+					Trigger = "4554";
 					Target = "35";
 					locked = "false";
 				};
@@ -303,7 +303,7 @@ new SimGroup(MissionGroup) {
 					homingCount = "0";
 
 					team = "0";
-					Trigger = "7615";
+					Trigger = "4557";
 					Target = "36";
 					locked = "false";
 				};
@@ -400,10 +400,10 @@ new SimGroup(MissionGroup) {
 			lockCount = "0";
 			homingCount = "0";
 
+			Trigger = "4568";
 			notReady = "1";
-			Trigger = "7626";
-			inUse = "Down";
 			Target = "39";
+			inUse = "Down";
 		};
 		new Marker(BankSpawn) {
 			position = "-155.307 126.636 243.233";
@@ -412,22 +412,67 @@ new SimGroup(MissionGroup) {
 			seqNum = "0";
 			msToNext = "1000";
 		};
-		new StaticShape() {
-			position = "-176.434 144.844 233.142";
-			rotation = "1 0 0 0";
-			scale = "1 1 1";
-			dataBlock = "BankTeleporter";
-			destination = "ATLSpawn";
-			desc = "Static Aim Trainer\nShoot static targets while in the air to score points!\nMove faster to score more points and have fun!";
+		new SimGroup(Teleporters) {
+
+			powerCount = "2";
+
+			new StaticShape() {
+				position = "-175.467 149.497 233.142";
+				rotation = "1 0 0 0";
+				scale = "1 1 1";
+				dataBlock = "BankTeleporter";
+				lockCount = "0";
+				homingCount = "0";
+
+				Desc = "Dynamic Aim Trainer\nShoot moving targets while in the air to score points!\nMove faster to score more points and have fun!";
+				destination = "ATMSpawn";
+			};
+			new StaticShape() {
+				position = "-170.634 150.644 233.142";
+				rotation = "1 0 0 0";
+				scale = "1 1 1";
+				dataBlock = "BankTeleporter";
+				lockCount = "0";
+				homingCount = "0";
+
+				Desc = "Aim Trainer\nShoot fast moving targets while in the air to score points!\nMove faster to score more points and have fun!";
+				destination = "ATHSpawn";
+			};
+			new StaticShape() {
+				position = "-176.634 144.844 233.142";
+				rotation = "1 0 0 0";
+				scale = "1 1 1";
+				dataBlock = "BankTeleporter";
+				lockCount = "0";
+				homingCount = "0";
+
+				Desc = "Static Aim Trainer\nShoot static targets while in the air to score points!\nMove faster to score more points and have fun!";
+				destination = "ATLSpawn";
+			};
 		};
 		new ForceFieldBare(TractorBeamFront) {
 			position = "-142.101 65.701 103.021";
 			rotation = "1 0 0 0";
 			scale = "10 40 140";
 			dataBlock = "TractorBeamFF";
-			velocityMod = "1.0";
+			lockCount = "0";
+			homingCount = "0";
+
 			gravityMod = "-2.75";
+			pz = "4575";
 			appliedForce = "0 0 0";
+			Target = "-1";
+			originalscale = "10 40 140";
+			velocityMod = "1.0";
+		};
+		new Trigger(BankWaypointZone) {
+			position = "-158.549 134.258 240.811";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "WaypointWranglerZone";
+			lockCount = "0";
+			homingCount = "0";
+			polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 -0.0000000 -1.0000000 -0.0000000 -0.0000000 -0.0000000 1.0000000";
 		};
 	};
 	new SimGroup(AimTrain) {
@@ -490,9 +535,8 @@ new SimGroup(MissionGroup) {
 				lockCount = "0";
 				homingCount = "0";
 
-				destination = "BankSpawn";
-				Target = "42";
 				Desc = "\nWelcome back to the Bank!";
+				destination = "BankSpawn";
 			};
 			new Marker(ATLSpawn) {
 				position = "-546.054 112.086 223.904";
@@ -501,6 +545,34 @@ new SimGroup(MissionGroup) {
 				seqNum = "0";
 				msToNext = "1000";
 			};
+		};
+		new SimGroup(AimTrainMed) {
+
+			powerCount = "0";
+
+			new Marker(ATMSpawn) {
+				position = "-203.46 693.682 274.118";
+				rotation = "0 0 -1 90";
+				scale = "1 1 1";
+				seqNum = "0";
+				msToNext = "1000";
+			};
+			new StaticShape(ATMBankTeleport) {
+				position = "-197.111 696.524 262.891";
+				rotation = "1 0 0 0";
+				scale = "1 1 1";
+				dataBlock = "BankTeleporter";
+				lockCount = "0";
+				homingCount = "0";
+
+				Target = "44";
+				Desc = "\nWelcome back to the Bank!";
+				destination = "BankSpawn";
+			};
+		};
+		new SimGroup(AimTrainHigh) {
+
+			powerCount = "0";
 		};
 	};
 };

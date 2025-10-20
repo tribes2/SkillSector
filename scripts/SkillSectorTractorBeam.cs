@@ -17,7 +17,7 @@ datablock ForceFieldBareData(TractorBeamFF)
 //    texture[3] = "skins/forcef4";
 //    texture[4] = "skins/forcef5";
 
-   framesPerSec = 5;
+   framesPerSec = 10;
    numFrames = 5;
    scrollSpeed = 15;
    umapping = 1.0;

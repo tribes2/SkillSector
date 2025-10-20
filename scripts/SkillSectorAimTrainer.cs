@@ -43,6 +43,7 @@ function atsessionCheck(%player) {
 
 // $DamageType::Default= 0; $DamageType::Blaster= 1; $DamageType::Plasma= 2; $DamageType::Bullet= 3; $DamageType::Disc= 4; $DamageType::Grenade= 5; $DamageType::Laser= 6; $DamageType::ELF= 7; $DamageType::Mortar= 8; $DamageType::Missile= 9; $DamageType::ShockLance= 10; $DamageType::Mine= 11; $DamageType::Explosion= 12; $DamageType::Impact= 13;	// Object to object collisions $DamageType::Ground= 14;	// Object to ground collisions $DamageType::Turret= 15;
 function calcScore(%targetObject, %sourceObject, %damageType, %damage, %position) {
+    // This is kinda half assed. But what more do you really need?
     %score = %damage * 100;
     %directHitOnly = !$AimTrainLowDummies.isMember(%targetObject);
 	switch$(%damageType) {
@@ -84,6 +85,12 @@ function DermDummy::damageObject(%data, %targetObject, %sourceObject, %position,
 //     echo("wtf is this then: " @ %this @ " tgt " @ %sourceObject);
 // }
 
+function AimTrainerInit() {
+    if (!$DEVMODE) {
+        findAndReplacePlaceholders();
+    }
+}
+
 function findAndReplacePlaceholders() {
     // This is not re-entrant safe, don't call it more than once!
     $AimTrainLowDummies = new SimSet();
@@ -111,9 +118,4 @@ function findAndReplacePlaceholders() {
         %obj.delete();
     }
     %trash.delete();
-}
-
-// Don't replace placeholder entities in development mode
-if ($DEVMODE == 0) {
-    findAndReplacePlaceholders();
 }
