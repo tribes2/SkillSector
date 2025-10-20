@@ -15,15 +15,13 @@ exec("scripts/SkillSectorAimTrainer.cs");
 exec("scripts/SkillSectorTractorBeam.cs");
 exec("scripts/SkillSectorWaypointWrangler.cs");
 
-package SkillSector {
-    function none() {}
-};
-
-function SkillSector::initGameVars(%game) {
-}
+// package SkillSector {
+//     function none() {}
+// };
 
 
-function SkillSector::missionLoadDone(%game) {
+function SkillSectorGame::missionLoadDone(%game)
+{
     DefaultGame::missionLoadDone(%game);
 
     echo("Mission loading...");
@@ -32,8 +30,12 @@ function SkillSector::missionLoadDone(%game) {
     WaypointWranglerInit();
 }
 
+function SkillSectorGame::initGameVars(%game)
+{
+}
+
 // No longer dispatching 'primary' waypoints because they can't be made semi-permanent.
-function SkillSector::clientMissionDropReady(%game, %client) {
+function SkillSectorGame::clientMissionDropReady(%game, %client) {
    messageClient(%client, 'MsgClientReady',"", %game.class);
 //    %game.resetScore(%client);
 //    for(%i = 1; %i <= %game.numTeams; %i++) {
