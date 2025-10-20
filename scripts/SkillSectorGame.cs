@@ -39,6 +39,8 @@ function SkillSector::clientMissionDropReady(%game, %client) {
 }
 
 if ($DEVMODE) {
+    moveMap.unbind(keyboard, "f5");
+    moveMap.unbind(keyboard, "f6");
     moveMap.bind(keyboard, "f5", dc);
     moveMap.bind(keyboard, "f6", ssrl);
     ObserverHUDWeaponList.delete();

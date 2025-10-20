@@ -3,9 +3,10 @@
 // 2. Point to point waypoints
 
 // Zone based waypoints are perfect for rooms full of teleporters / switches / etc.
-// Zone based waypoint SimGroup should have a 'zone' waypoint that is only shown when the player is outside of the zone, allowing zones to be discovered.
-
 // Point to point waypoints are perfect for races and leading someone from one end of the map to another. I dunno, like a tutorial.
+
+// Waypoints don't seem to be removable per-client without extensive modifications, so they're permanent.
+// While it's possible to swap the clients team to show them different team waypoints, I like everyone being on the same sensor network.
 
 // After a lot of reading scripts, engine source code and Ghidra decompiling, I've ascertained that... we're stuck with a bit of an odd structure.
 // While it's true that you can allocate 512 TargetManager targets, HUDTargetList is limited to 32 targets exactly.
@@ -13,9 +14,6 @@
 // 1 - ClientTarget::AssignedTask
 // 15 - ClientTarget::PotentialTask
 // 16 - ClientTarget::Waypoint
-
-// Waypoints can't be removed per-client without extensive modifications, so they're still permament.
-// While it's possible to swap the clients team to show them different team waypoints, it doesn't seem worth the hassle.
 
 // What does that mean for my original intent with this script? Well, it's still achievable... but only by spamming the client.
 // PotentialTasks are shown for 2 seconds after they're received.
@@ -29,10 +27,44 @@ datablock TriggerData(WaypointWranglerZone) {
    tickPeriodMS = 1500;
 };
 
-function WaypointWranglerZone__onAdd(%this, %obj) {
-    // New zone added for waypoint wrangling.
-    echo("Obj: " @ %obj);
-    echo("New group: " @ %this.getGroup());
+function WaypointWranglerZone::onEnterTrigger(%data, %trigger, %obj) {
+    if(%obj.getDataBlock().className !$= "Armor") {
+        return;
+    }
+    echo("Trigger entered!");
+    WWStartWaypointDispatch(%obj.client, %trigger);
+}
+
+function WaypointWranglerZone::onLeaveTrigger(%this, %trigger, %obj) {
+    cancel(%obj.client.wwsched);
+}
+
+function WaypointWranglerZone::onTickTrigger(%this, %trigger) {
+}
+
+function scanZoneForWaypoints(%group) {
+    for (%i = 0; %i < %group.getCount(); %i++) {
+        %obj = %group.getObject(%i);
+        if (%obj.getClassName() $= "SimGroup") {
+            echo("Traversing detected group: " @ %obj.getName());
+            scanZoneForWaypoints(%obj);
+        } else if (%obj.wrangle !$= "") {
+            // echo("Found waypointable object in zone: " @ %obj.getName() @ " txt: " @ %obj.wrangle);
+            $WPZPoints[$WPZNextFree, $WPIndex] = %obj;
+            $WPIndex++;
+        }
+    }
+}
+
+function initWranglerZone(%obj) {
+    echo("Waypoint zone detected: " @ %obj.getName() @ " tgt: " @ %obj.target);
+    // Iterate over the containing group and find wrangled objects
+    $WPIndex = 1;
+    scanZoneForWaypoints(%obj.getGroup());
+    // zero index is reserved for 'count of indexed waypoints'
+    $WPZPoints[$WPZNextFree, 0] = $WPIndex-1;
+    $WPZones[$WPZNextFree] = %obj;
+    $WPZNextFree++;
 }
 
 function scanGroupForWWZ(%group) {
@@ -43,12 +75,10 @@ function scanGroupForWWZ(%group) {
     for (%i = 0; %i < %group.getCount(); %i++) {
         %obj = %group.getObject(%i);
         if (%obj.getClassName() $= "SimGroup") {
-            echo("Group detected: " @ %obj.getName());
+            echo("Traversing detected group: " @ %obj.getName());
             scanGroupForWWZ(%obj);
         } else if (%obj.getClassName() $= "Trigger" && %obj.getDatablock().getName() $= "WaypointWranglerZone") {
-            echo("Waypoint detected: " @ %obj.getName());
-            $WPZones[$WPZNextFree] = %obj;
-            $WPZNextFree++;
+            initWranglerZone(%obj);
         }
     }
 }
@@ -57,85 +87,35 @@ function WaypointWranglerInit() {
     // Reset WPZone system
     $WPZNextFree = 0;
     $WPZones[0] = 0;
+    $WPZPoints[0, 0] = 0;
     // Iterate over every group and find relevant triggers
     scanGroupForWWZ(MissionGroup);
-    // Iterate over 
-    // Use zone.getGroup to get their containing group
-    // Iterate over all the objects in the containing group that have a WPN (waypoint name), put them into a SimSet or array with a name relating to the containing group
-    // Whenever a player enters the Trigger zone, hide the pimary waypoint associated with the zone and show the other waypoints
-    // Might make sense to make a flag for 'hide all other primary waypoints inside zone' (useful for point to point races and very busy zones like the Bank)
-    // This flag might get set automatically if there are too many waypoints in a zone (>10?)
-
-    // This system should prevent players for placing waypoints if they exceed the maximum waypoint count. I don't know how that works so I probably won't do it yet.
 }
-
-// MaxTargets = 512
-// HUDTargetList = 32
-
-//%target = createTarget(%flag.waypoint, CTFGame::getTeamName( CTFGame, %flag.team), "", "", 'Base', %flag.team, 0);
 
 function showWaypoint(%client, %wp) {
-    echo(%wp.getName());
-    echo(%wp.getPosition());
+    // echo("Trying to emit waypoint for " @ %wp @ " and client " @ %client);
     %client.setTargetId(%wp.target);
-    commandToClient(%client, 'TaskInfo', %client, -1, false, %wp.getName());
-    commandToClient(%client, 'PotentialTask', %client.name, "wub wub", "target name");
+    commandToClient(%client, 'TaskInfo', %client, -1, false, %wp.wrangle);
+    // PotentialTask just shows a message in chat, not desirable for this configuration
+    //commandToClient(%client, 'PotentialTask', %client.name, "", "target name");
     %client.sendTargetTo(%client, false);
-    //   %clRabbit.player.scopeToClient(%cl);
-    //   %visMask = getSensorGroupAlwaysVisMask(%clRabbit.getSensorGroup());
-    //   %visMask |= (1 << %cl.getSensorGroup());
-    //   setSensorGroupAlwaysVisMask(%clRabbit.getSensorGroup(), %visMask);
-    //   %cl.setTargetId(%clRabbit.target);
-    //   commandToClient(%cl, 'TaskInfo', %cl, -1, false, "Kill the Rabbit!");
-    //   commandToClient(%targetClient, 'PotentialTask', %client.name, %client.currentTaskDescription, %targetName);
-    //   %client.sendTargetTo(%targetClient, false);
-    //   %cl.sendTargetTo(%cl, true);
 }
 
-function hideWaypoint() {
-
-//     function clientCmdAcceptedTask(%description) {
-//     addMessageHudLine("\c3Your current task is:\cr " @ %description);
-//     }
-
-//    commandToClient(%client, 'TaskInfo', %issueClient, -1, %issueClient.name, %description);
-//    commandToClient(%client, 'AcceptedTask', %description);
-   
-//    %client.sendTargetTo(%client, true);
-}
-
-function debugDispatch() {
-    %count = ClientGroup.getCount();
-    
-	for (%i = 0; %i < %count; %i++) {
-		%client = ClientGroup.getObject(%i);
-        echo("Client: " @ %client);
-        WWDispatchWaypoints(%client);
+function WWDispatch(%client, %zoneIndex) {
+    for (%i = 1; %i < $WPZPoints[%zoneIndex, 0]+1; %i++) {
+        showWaypoint(%client, $WPZPoints[%zoneIndex, %i]);
     }
+    %client.wwsched = schedule(1900, 0, WWDispatch, %client, %zoneIndex);
 }
 
-function WWDispatchWaypoints(%client) {
+function WWStartWaypointDispatch(%client, %zone) {
+    // echo("zone count:" @ $WPZNextFree);
     for (%i = 0; %i < $WPZNextFree; %i++) {
-        %wp = $WPZones[%i];
-        showWaypoint(%client, %wp);
-        //allocTarget, createTarget
-        // allocClientTarget is only relevant to other players, it's for creating targets that represent client connections
-        //    Con::addCommand("ClientTarget", "sendToServer",       cTargetSendToServer,       "target.sendToServer()",                  2, 2);
-        //    Con::addCommand("ClientTarget", "createWaypoint",     cCreateWaypoint,           "target.createWaypoint(text)",            3, 3);
-        //    Con::addCommand("ClientTarget", "addPotentialTask",   cAddPotentialTask,         "target.addPotentialTask()",              2, 2);
-        //    Con::addCommand("ClientTarget", "setText",            cSetText,                  "target.setText(text)",                   3, 3);
-        //    Con::addCommand("ClientTarget", "getTargetId",        cGetTargetId,              "target.getTargetId()",                   2, 2);
-        //    Con::addCommand("createClientTarget",                 cCreateClientTarget,       "createClientTarget(targetId, <x y z>)",  2, 3);
-        //    Con::addCommand("removeClientTargetType",             cRemoveClientTargetType,   "removeClientTargetType(client, type)",   3, 3);
-        //    Con::addVariable("clientTargetTimeout", TypeS32, &HUDTargetList::smTargetTimeout);
+        %wpz = $WPZones[%i];
+        // echo("testing " @ %zone @ " against " @ %wpz);
+        if (%wpz == %zone) {
+            // echo("Zone found! idx " @ %i @ " ct: " @ $WPZPoints[%i, 0]);
+            WWDispatch(%client, %i);
+        }
     }
 }
-
-
-
-
-
-// Revisiting this concept by looking through the code for dlgDrawText\(.* to find all locations where text is rendered
-// Hopefully I can find a more suitable way to render text for these items, but I'm not overly optimistic
-// guiShapeNameHud seems relevant to 'directly looking at an object and seeing some text' but that's not quite what I want
-// shapeNameHud seems similar
