@@ -20,8 +20,7 @@ exec("scripts/SkillSectorWaypointWrangler.cs");
 // };
 
 
-function SkillSectorGame::missionLoadDone(%game)
-{
+function SkillSectorGame::missionLoadDone(%game) {
     DefaultGame::missionLoadDone(%game);
 
     echo("Mission loading...");
@@ -30,8 +29,7 @@ function SkillSectorGame::missionLoadDone(%game)
     WaypointWranglerInit();
 }
 
-function SkillSectorGame::initGameVars(%game)
-{
+function SkillSectorGame::initGameVars(%game) {
 }
 
 // No longer dispatching 'primary' waypoints because they can't be made semi-permanent.
@@ -47,6 +45,13 @@ function SkillSectorGame::clientMissionDropReady(%game, %client) {
    messageClient(%client, 'MsgMissionDropInfo', '\c0You are in mission %1 (%2).', $MissionDisplayName, $MissionTypeDisplayName, $ServerName); 
 //    WWDispatchWaypoints(%client);
    DefaultGame::clientMissionDropReady(%game, %client);
+}
+
+
+function SkillSectorGame::gameOver(%game) {
+	DefaultGame::gameOver(%game);
+
+    WaypointWranglerShutdown();
 }
 
 if ($DEVMODE) {

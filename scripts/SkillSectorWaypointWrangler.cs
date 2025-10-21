@@ -42,6 +42,13 @@ function WaypointWranglerZone::onLeaveTrigger(%this, %trigger, %obj) {
 function WaypointWranglerZone::onTickTrigger(%this, %trigger) {
 }
 
+function ShutdownWaypointWrangler() {
+    %count = ClientGroup.getCount();
+    for (%i = 0; %i < %count; %i++) {
+        cancel(ClientGroup.getObject(%i).wwsched);
+    }
+}
+
 function scanZoneForWaypoints(%group) {
     for (%i = 0; %i < %group.getCount(); %i++) {
         %obj = %group.getObject(%i);
