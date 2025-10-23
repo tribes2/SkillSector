@@ -8,6 +8,7 @@ lighting/
 prefs/
 gui/
 recordings/
+fonts/
 Classic*
 
 # scripts folder need to be ignored and then exclusions have to be carved out

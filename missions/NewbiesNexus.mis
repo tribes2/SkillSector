@@ -13,10 +13,10 @@
 //--- OBJECT WRITE BEGIN ---
 new SimGroup(MissionGroup) {
 
-	musicTrack = "ice";
 	Team_Hunters_timeLimit = "25";
-	powerCount = "0";
+	musicTrack = "ice";
 	cdTrack = "5";
+	powerCount = "0";
 	Hunters_timeLimit = "25";
 
 	new MissionArea(MissionArea) {
@@ -53,9 +53,9 @@ new SimGroup(MissionGroup) {
 		terrainFile = "Scarabrae_nef.ter";
 		squareSize = "8";
 
+		hazeDistance = "250";
 		position = "-1024 -1024 0";
 		visibleDistance = "1200";
-		hazeDistance = "250";
 		locked = "true";
 	};
 	new NavigationGraph(NavGraph) {
@@ -65,9 +65,9 @@ new SimGroup(MissionGroup) {
 
 		position = "0 0 0 1";
 		YDimOverSize = "0";
+		conjoinBowlDev = "20";
 		GraphFile = "Scarabrae_nef.nav";
 		rotation = "0 0 0 0";
-		conjoinBowlDev = "20";
 		coverage = "0";
 		scale = "1 1 1";
 		XDimOverSize = "0";
@@ -244,8 +244,8 @@ new SimGroup(MissionGroup) {
 					lockCount = "0";
 					homingCount = "0";
 
-					team = "0";
 					Target = "33";
+					team = "0";
 					locked = "false";
 				};
 				new InteriorInstance() {
@@ -266,9 +266,9 @@ new SimGroup(MissionGroup) {
 					lockCount = "0";
 					homingCount = "0";
 
-					team = "0";
-					Trigger = "11698";
 					Target = "34";
+					team = "0";
+					Trigger = "20162";
 					locked = "false";
 				};
 				new StaticShape() {
@@ -279,9 +279,9 @@ new SimGroup(MissionGroup) {
 					lockCount = "0";
 					homingCount = "0";
 
-					team = "0";
-					Trigger = "11700";
 					Target = "35";
+					team = "0";
+					Trigger = "20164";
 					locked = "false";
 				};
 				new InteriorInstance() {
@@ -302,9 +302,9 @@ new SimGroup(MissionGroup) {
 					lockCount = "0";
 					homingCount = "0";
 
-					team = "0";
-					Trigger = "11703";
 					Target = "36";
+					team = "0";
+					Trigger = "20167";
 					locked = "false";
 				};
 			};
@@ -400,10 +400,10 @@ new SimGroup(MissionGroup) {
 			lockCount = "0";
 			homingCount = "0";
 
-			notReady = "1";
-			Trigger = "11714";
-			Target = "39";
 			inUse = "Down";
+			Target = "39";
+			Trigger = "20178";
+			notReady = "1";
 		};
 		new Marker(BankSpawn) {
 			position = "-155.307 126.636 243.233";
@@ -424,10 +424,10 @@ new SimGroup(MissionGroup) {
 				lockCount = "0";
 				homingCount = "0";
 
-				wrangle = "Aim Trainer teleports";
 				Target = "40";
-				destination = "ATMSpawn";
+				wrangle = "Aim Trainer teleports";
 				Desc = "Dynamic Aim Trainer\nShoot moving targets while in the air to score points!\nMove faster to score more points and have fun!";
+				destination = "ATMSpawn";
 			};
 			new StaticShape(ATHT) {
 				position = "-170.634 150.644 233.142";
@@ -438,8 +438,8 @@ new SimGroup(MissionGroup) {
 				homingCount = "0";
 
 				Target = "41";
-				destination = "ATHSpawn";
 				Desc = "Aim Trainer\nShoot fast moving targets while in the air to score points!\nMove faster to score more points and have fun!";
+				destination = "ATHSpawn";
 			};
 			new StaticShape(ATLT) {
 				position = "-176.634 144.844 233.142";
@@ -450,23 +450,23 @@ new SimGroup(MissionGroup) {
 				homingCount = "0";
 
 				Target = "42";
-				destination = "ATLSpawn";
 				Desc = "Static Aim Trainer\nShoot static targets while in the air to score points!\nMove faster to score more points and have fun!";
+				destination = "ATLSpawn";
 			};
 			new StaticShape(DuelZone) {
-				position = "-170.634 150.644 233.142";
+				position = "-140.434 150.844 233.142";
 				rotation = "1 0 0 0";
 				scale = "1 1 1";
 				dataBlock = "BankTeleporter";
 				lockCount = "0";
 				homingCount = "0";
 
-				wrangle = "Duel zone teleports";
 				Target = "43";
-				destination = "undefined";
+				wrangle = "Duel zone teleports";
 				Desc = "it\'s time to d-d-d-d-d-d-d-duel";
+				destination = "undefined";
 			};
-			new StaticShape(FlagPractice) {
+			new StaticShape(FTT) {
 				position = "-176.634 117.644 233.142";
 				rotation = "1 0 0 0";
 				scale = "1 1 1";
@@ -474,10 +474,10 @@ new SimGroup(MissionGroup) {
 				lockCount = "0";
 				homingCount = "0";
 
-				wrangle = "Flag practice teleports";
 				Target = "44";
-				destination = "undefined";
-				Desc = "it\'s time to d-d-d-d-d-d-d-duel";
+				wrangle = "Flag Trainer teleport";
+				Desc = "Flag Training Zone\nCatch flags! Throw flags!\nWe love flags!";
+				destination = "FTSpawn";
 			};
 		};
 		new ForceFieldBare(TractorBeamFront) {
@@ -489,10 +489,10 @@ new SimGroup(MissionGroup) {
 			homingCount = "0";
 
 			gravityMod = "-2.75";
-			appliedForce = "0 0 0";
 			originalscale = "10 40 140";
 			Target = "-1";
-			pz = "11723";
+			appliedForce = "0 0 0";
+			pz = "20187";
 			velocityMod = "1.0";
 		};
 		new Trigger(BankWaypointZone) {
@@ -578,8 +578,8 @@ new SimGroup(MissionGroup) {
 				homingCount = "0";
 
 				Target = "45";
-				destination = "BankSpawn";
 				Desc = "\nWelcome back to the Bank!";
+				destination = "BankSpawn";
 			};
 			new Marker(ATLSpawn) {
 				position = "-546.054 112.086 223.904";
@@ -602,15 +602,15 @@ new SimGroup(MissionGroup) {
 			};
 			new StaticShape(ATMBankTeleport) {
 				position = "-284.511 664.298 254.306";
-				rotation = "-1 0 0 9.99997";
+				rotation = "-1 0 0 12";
 				scale = "1 1 1";
 				dataBlock = "BankTeleporter";
 				lockCount = "0";
 				homingCount = "0";
 
 				Target = "46";
-				destination = "BankSpawn";
 				Desc = "\nWelcome back to the Bank!";
+				destination = "BankSpawn";
 			};
 			new TSStatic(LeftPlaceholder) {
 				position = "-419.363 775.104 251.039";
@@ -648,6 +648,60 @@ new SimGroup(MissionGroup) {
 		new SimGroup(AimTrainHigh) {
 
 			powerCount = "0";
+		};
+	};
+	new SimGroup(FlagTrain) {
+
+		powerCount = "0";
+
+		new Marker(FTSpawn) {
+			position = "284.013 -543.625 261.344";
+			rotation = "0 0 -1 90";
+			scale = "1 1 1";
+			seqNum = "0";
+			msToNext = "1000";
+		};
+		new StaticShape(FTBankTeleport) {
+			position = "272.726 -537.15 254.086";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "BankTeleporter";
+			lockCount = "0";
+			homingCount = "0";
+
+			Target = "47";
+			Desc = "\nWelcome back to the Bank!";
+			destination = "BankSpawn";
+		};
+		new StaticShape() {
+			position = "264.386 -581.653 232.142";
+			rotation = "-1 0 0 15";
+			scale = "1 1 1";
+			dataBlock = "ExteriorFlagStand";
+			lockCount = "0";
+			homingCount = "0";
+
+			Target = "-1";
+		};
+		new StaticShape() {
+			position = "247.87 -543.343 249.677";
+			rotation = "0 1 0 15";
+			scale = "1 1 1";
+			dataBlock = "ExteriorFlagStand";
+			lockCount = "0";
+			homingCount = "0";
+
+			Target = "-1";
+		};
+		new StaticShape() {
+			position = "319.348 -598.244 226.873";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "ExteriorFlagStand";
+			lockCount = "0";
+			homingCount = "0";
+
+			Target = "-1";
 		};
 	};
 };

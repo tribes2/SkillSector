@@ -14,9 +14,13 @@ exec("scripts/SkillSectorTeleporter.cs");
 exec("scripts/SkillSectorAimTrainer.cs");
 exec("scripts/SkillSectorTractorBeam.cs");
 exec("scripts/SkillSectorWaypointWrangler.cs");
+exec("scripts/SkillSectorFlagTrainer.cs");
 
-// package SkillSector {
-//     function none() {}
+// package SkillSectorGame {
+//     function EditorSaveMissionMenu() {
+//         // Delete all flags, they're spawned at 'boot'
+//         parent::EditorSaveMissionMenu();
+//     }
 // };
 
 
@@ -25,8 +29,9 @@ function SkillSectorGame::missionLoadDone(%game) {
 
     echo("Mission loading...");
 
-    AimTrainerInit();
-    WaypointWranglerInit();
+    InitAimTrainer();
+    InitWaypointWrangler();
+    %game.InitFlagTrainer();
 }
 
 function SkillSectorGame::initGameVars(%game) {

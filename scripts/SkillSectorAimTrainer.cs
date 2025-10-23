@@ -85,7 +85,7 @@ function DermDummy::damageObject(%data, %targetObject, %sourceObject, %position,
 //     echo("wtf is this then: " @ %this @ " tgt " @ %sourceObject);
 // }
 
-function AimTrainerInit() {
+function InitAimTrainer() {
     if (!$DEVMODE) {
         findAndReplacePlaceholders();
     }

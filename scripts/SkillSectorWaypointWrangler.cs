@@ -90,7 +90,7 @@ function scanGroupForWWZ(%group) {
     }
 }
 
-function WaypointWranglerInit() {
+function InitWaypointWrangler() {
     // Reset WPZone system
     $WPZNextFree = 0;
     $WPZones[0] = 0;
