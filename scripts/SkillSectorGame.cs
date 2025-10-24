@@ -57,6 +57,8 @@ function SkillSectorGame::gameOver(%game) {
 	DefaultGame::gameOver(%game);
 
     WaypointWranglerShutdown();
+    %game.ShutdownFlagTrainer();
+    // deactivatePackage(SkillSectorGame);
 }
 
 if ($DEVMODE) {

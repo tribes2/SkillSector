@@ -1,10 +1,9 @@
-// TODO: flag cannon
-// TODO: flag collide with stand, return to stand
 // TODO: flag goals
 
 // Time in seconds
 $FlagTrainerTossReset = 45;
 $FlagTrainerGrabReset = 90;
+$FlagTrainerCannonInterval = 25;
 
 function Flag::objectiveInit(%data, %flag) {
    %flag.originalPosition = %flag.getTransform();
@@ -12,6 +11,12 @@ function Flag::objectiveInit(%data, %flag) {
    %flag.isHome = true;
    %flag.carrier = 0;
    %flag.grabber = 0;
+}
+
+function SkillSectorGame::flagStandCollision(%game, %dataBlock, %obj, %colObj) {
+    if (%colObj.getDatablock().getName() $= "FLAG" && !%colObj.isHome) {
+        returnFlag(%colObj, 'StandCollide');
+    }
 }
 
 function initFlagStand(%stand) {
@@ -30,6 +35,23 @@ function initFlagStand(%stand) {
     if(%flag.stand) {
         %flag.stand.getDataBlock().onFlagReturn(%flag.stand);
     }
+    if (%stand.cannon) {
+        // Stand is a flag cannon! Fire the missiles!
+        $Cannons[$CannonCount] = %stand;
+        $CannonCount++;
+        flagCannon(%stand);
+    }
+}
+
+function flagCannon(%stand) {
+    // Fire flag and schedule another flag fire
+    %flag = %stand.flag;
+    if (isObject(%flag)) {
+        %flag.setVelocity(%stand.flagvel);
+        cancel(%stand.cannonSched); // don't allow accidental re-queue
+        %stand.cannonSched = schedule($FlagTrainerCannonInterval*1000, 0, flagCannon, %stand);
+        returnFlagAfter(%flag, $FlagTrainerCannonInterval-2, 'CannonReset');
+    }
 }
 
 function scanGroupForFlagStands(%group) {
@@ -46,62 +68,45 @@ function scanGroupForFlagStands(%group) {
 function SkillSectorGame::InitFlagTrainer() {
     if ($DEVMODE) {
         // echo("Not putting a flags on stands");
-        // return;
+        return;
     }
+    $CannonCount = 0;
     // Find all the flag stands and give them a flag
     scanGroupForFlagStands(FlagTrain);
 }
 
+function SkillSectorGame::ShutdownFlagTrainer() {
+    for (%i = 0; %i < $CannonCount; %i++) {
+        cancel($Cannons[%i].cannonSched);
+    }
+}
+
 function SkillSectorGame::playerTouchFlag(%game, %player, %flag) {
     if (isObject(%player.holdingFlag)) {
-        echo("Already holding a flag");
+        messageClient(%player.client, 'MsgFlagAlready', '\c0You\'re already holding a flag - don\'t be greedy!');
         return;
     }
     if (isObject(%flag.carrier)) {
-        echo("Can't pick up a flag that's being carried")
+        echo("Can't pick up a flag that's being carried");
         return;
     }
     %game.playerTouchEnemyFlag(%player, %flag);
-//    %client = %player.client;
-//    if ((%flag.carrier $= "") && (%player.getState() !$= "Dead"))
-//    {
-//       // z0dd - ZOD, 5/07/04. Cancel the lava return.
-//       if(isEventPending(%obj.lavaEnterThread)) 
-//          cancel(%obj.lavaEnterThread);
-
-//       //flag isn't held and has been touched by a live player
-//       if (%client.team == %flag.team)
-//          %game.playerTouchOwnFlag(%player, %flag);
-//       else
-//          %game.playerTouchEnemyFlag(%player, %flag);
-//    }
-//    // toggle visibility of the flag
-//    setTargetRenderMask(%flag.waypoint.getTarget(), %flag.isHome ? 0 : 1);
 }
 
 function SkillSectorGame::playerTouchEnemyFlag(%game, %player, %flag) {
     %client = %player.client;
-    %player.holdingFlag = %flag;  //%player has this flag
-    %flag.carrier = %player;  //this %flag is carried by %player
+    %player.holdingFlag = %flag;
+    %flag.carrier = %player;
     %player.mountImage(FlagImage, $FlagSlot, true, 'dsword');
 
-   %flag.hide(true);
-   %flag.startFade(0, 0, false);
-   if(%flag.stand)
-      %flag.stand.getDataBlock().onFlagTaken(%flag.stand);//animate, if exterior stand
+    %flag.hide(true);
+    %flag.startFade(0, 0, false);
+    if(%flag.stand) %flag.stand.getDataBlock().onFlagTaken(%flag.stand);
     returnFlagAfter(%flag, $FlagTrainerGrabReset, 'GrabReset');
 }
 
-function SkillSectorGame::dropFlag(%game, %player)
-{
+function SkillSectorGame::dropFlag(%game, %player) {
     %player.throwObject(%player.holdingFlag);
-//    if(%player.holdingFlag > 0)
-//    {
-//       if (!%player.client.outOfBounds)
-//          %player.throwObject(%player.holdingFlag);
-//       else
-//          %game.boundaryLoseFlag(%player);
-//    }
 }
 
 function returnFlag(%flag, %reason) {
@@ -110,16 +115,19 @@ function returnFlag(%flag, %reason) {
         %flag.hide(false);
         %flag.carrier.holdingFlag = 0; // tell the player they've lost the flag
     }
-    %flag.stand.getDataBlock().onFlagReturn(%flag.stand);
+    if(%flag.stand) %flag.stand.getDataBlock().onFlagReturn(%flag.stand);
+    %flag.setVelocity("0 0 0");
     %flag.setTransform(%flag.stand.getTransform());
-    //messageClient(%flag.carrier.client, 'MsgFlagReturned', '\c0Flag returned (%1)', %reason);
+    %flag.isHome = true;
+    //messageClient(%flag.carrier.client, 'MsgFlagReturned', '\c0Flag returned (%1)', %reason); // Kinda annoying, players will figure this out eventually
     %flag.carrier = 0;
 }
 
 function returnFlagAfter(%flag, %after, %reason) {
+    %flag.isHome = false; // happens whenever player tosses or picks up flag. also happens when cannon fires
     cancel(%flag.returnSched);
     %flag.returnSched = schedule(%after*1000, 0, returnFlag, %flag, %reason);
-    //messageClient(%flag.carrier.client, 'MsgFlagReturnCountdown', '\c0Flag will be returned to stand in %1 seconds (%2)', %after, %reason);
+    //messageClient(%flag.carrier.client, 'MsgFlagReturnCountdown', '\c0Flag will be returned to stand in %1 seconds (%2)', %after, %reason); // Kinda annoying, players will figure this out eventually
 }
 
 function SkillSectorGame::playerDroppedFlag(%game, %player) {
