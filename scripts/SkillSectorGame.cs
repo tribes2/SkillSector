@@ -37,6 +37,10 @@ function SkillSectorGame::missionLoadDone(%game) {
 function SkillSectorGame::initGameVars(%game) {
 }
 
+function SkillSectorGame::onClientLeaveGame(%client) {
+    CLWaypointWrangler(%client);
+}
+
 // No longer dispatching 'primary' waypoints because they can't be made semi-permanent.
 function SkillSectorGame::clientMissionDropReady(%game, %client) {
    messageClient(%client, 'MsgClientReady',"", %game.class);
@@ -51,7 +55,6 @@ function SkillSectorGame::clientMissionDropReady(%game, %client) {
 //    WWDispatchWaypoints(%client);
    DefaultGame::clientMissionDropReady(%game, %client);
 }
-
 
 function SkillSectorGame::gameOver(%game) {
 	DefaultGame::gameOver(%game);

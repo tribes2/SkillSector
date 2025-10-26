@@ -42,6 +42,11 @@ function WaypointWranglerZone::onLeaveTrigger(%this, %trigger, %obj) {
 function WaypointWranglerZone::onTickTrigger(%this, %trigger) {
 }
 
+function CLWaypointWrangler(%client) {
+    // cancel any ongoing waypoint wrangler scheduler
+    cancel(%client.wwsched);
+}
+
 function ShutdownWaypointWrangler() {
     %count = ClientGroup.getCount();
     for (%i = 0; %i < %count; %i++) {
@@ -112,9 +117,12 @@ function WWDispatch(%client, %zoneIndex) {
     for (%i = 1; %i < $WPZPoints[%zoneIndex, 0]+1; %i++) {
         showWaypoint(%client, $WPZPoints[%zoneIndex, %i]);
     }
+    cancel(%client.wwsched); // can't be dispatched for more than one zone at once
     %client.wwsched = schedule(1900, 0, WWDispatch, %client, %zoneIndex);
 }
 
+// This function is unnecessarily expensive, this lookup could be done by attaching the zone and index to the trigger.
+// I'm also too lazy to re-write it now
 function WWStartWaypointDispatch(%client, %zone) {
     // echo("zone count:" @ $WPZNextFree);
     for (%i = 0; %i < $WPZNextFree; %i++) {

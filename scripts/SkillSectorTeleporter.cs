@@ -38,7 +38,7 @@ function BankTeleporter::onCollision(%data, %obj, %collider) {
         messageClient(%collider.client, 'MsgStationDenied', '\c2Teleporter is recharging please stand by. ~wfx/powered/nexus_deny.wav');
         return;
     }
-    messageClient(%collider.client, 'MsgTeleportStart', '\c2Teleporter is calculating transport coherence... ~wfx/misc/nexus_idle.wav');
+   //messageClient(%collider.client, 'MsgTeleportStart', '\c2Teleporter is calculating transport coherence... ~wfx/misc/nexus_idle.wav');
     %collider.setVelocity("0 0 0");
     %collider.setMoveState(true);
     %collider.startFade(1000, 0, true);
